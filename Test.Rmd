@@ -149,19 +149,6 @@ Interestingly, students who participate in extracurriculars have slightly higher
 
 ## 🧠 Section 6: Putting It All Together
 
-```{r correlation-matrix}
-ggcorr(
-  data %>% select(study_hours_per_day, sleep_hours, social_media_hours, exercise_frequency, exam_score),
-  label = TRUE,
-  label_size = 4,
-  low = "#e66101",     # orange for negative correlation
-  mid = "#f7f7f7",     # neutral color
-  high = "#1b9e77",    # green for positive correlation
-  midpoint = 0
-) +
-  ggtitle("Correlation Between Variables") +
-  theme_minimal()
-```
 ```{r}
 ggcorr(
   data %>% 
