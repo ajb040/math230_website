@@ -1,0 +1,16 @@
+---
+title: "About this site"
+description: |
+  Some additional details about the website
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r}
+library(readr)
+
+student_data = read.csv("student_habits_performance.csv")
+```
+

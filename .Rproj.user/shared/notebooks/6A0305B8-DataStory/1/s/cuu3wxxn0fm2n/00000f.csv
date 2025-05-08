@@ -1,0 +1,2 @@
+"0","ggcorr(data %>% select(study_hours_per_day, sleep_hours, social_media_hours, exercise_frequency, exam_score), label = TRUE) +"
+"0","  ggtitle(""Correlation Between Variables"")"

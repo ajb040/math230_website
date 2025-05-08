@@ -1,0 +1,181 @@
+---
+title: "More Than Just Studying: The Complex Puzzle of Student Success"
+description: "An exploration of how study time, sleep, social media, and exercise habits influence exam performance."
+output: distill::distill_article
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+library(tidyverse)
+library(plotly)
+library(janitor)
+library(GGally)
+library(viridis)
+
+# Custom color palette
+custom_palette <- c(
+  "primary" = "#FFA500",   # orange
+  "secondary" = "#FFD700", # yellow
+  "tertiary" = "#0072B2",   # blue (colorblind safe)
+  "accent" = "#009E73",     # green (colorblind safe)
+  "contrast" = "#D55E00"     # red-orange (colorblind safe)
+)
+```
+
+```{r load-data}
+data <- read_csv("student_habits_performance.csv") %>%
+  clean_names()
+
+data <- data %>%
+  mutate(score_tier = case_when(
+    exam_score >= 90 ~ "High",
+    exam_score >= 75 ~ "Medium",
+    TRUE ~ "Low"
+  ))
+```
+
+## 🎓 More Than Just Studying: The Complex Puzzle of Student Success
+
+We often hear that students who study more get better grades — and that’s largely true. But performance isn’t only about study time. This data story explores how **other factors**, like **sleep habits**, **social media use**, and **physical exercise**, play subtle but meaningful roles in shaping student outcomes.
+
+---
+
+## 📍 Section 1: Study Hours – The Strongest Predictor
+
+```{r hist-exam-score}
+ggplot(data, aes(x = exam_score)) +
+  geom_histogram(fill = custom_palette["primary"], color = "white", bins = 20) +
+  labs(title = "Distribution of Exam Scores", x = "Exam Score", y = "Count") +
+  theme_minimal()
+```
+
+```{r study-vs-score}
+ggplot(data, aes(x = study_hours_per_day, y = exam_score)) +
+  geom_point(color = custom_palette["primary"], alpha = 0.7) +
+  geom_smooth(method = "lm", se = FALSE, color = custom_palette["secondary"]) +
+  labs(title = "More Studying, Better Scores?", x = "Study Hours", y = "Exam Score") +
+  theme_minimal()
+```
+
+---
+
+## 😴 Section 2: Sleep – A Support System
+
+```{r sleep-vs-score}
+ggplot(data, aes(x = sleep_hours, y = exam_score)) +
+  geom_point(color = custom_palette["primary"], alpha = 0.7) +
+  geom_smooth(method = "lm", se = FALSE, color = custom_palette["secondary"]) +
+  labs(title = "Sleep and Exam Performance", x = "Sleep Hours", y = "Exam Score") +
+  theme_minimal()
+```
+
+```{r sleep-vs-study-score}
+ggplot(data, aes(x = study_hours_per_day, y = sleep_hours, color = exam_score)) +
+  geom_point(size = 3, alpha = 0.8, color = custom_palette["contrast"]) +
+  scale_color_gradient(low = custom_palette["tertiary"], high = custom_palette["accent"]) +
+  labs(title = "Balance of Study and Sleep by Exam Score", x = "Study Hours", y = "Sleep Hours") +
+  theme_minimal()
+```
+
+```{r sleep-tier}
+ggplot(data, aes(x = score_tier, y = sleep_hours, fill = score_tier)) +
+  geom_col(stat = "summary", fun = mean, position = position_dodge()) +
+  labs(title = "Average Sleep Hours by Score Tier", x = "Score Tier", y = "Average Sleep Hours") +
+  theme_minimal()
+```
+
+---
+
+## 📱 Section 3: Social Media – A Subtle Distraction
+
+```{r social-vs-score}
+ggplot(data, aes(x = social_media_hours, y = exam_score)) +
+  geom_point(color = custom_palette["primary"], alpha = 0.7) +
+  geom_smooth(method = "lm", se = FALSE, color = custom_palette["secondary"]) +
+  labs(title = "Social Media Time vs. Exam Score", x = "Social Media Hours", y = "Exam Score") +
+  theme_minimal()
+```
+
+```{r social-vs-sleep}
+ggplot(data, aes(x = social_media_hours, y = sleep_hours)) +
+  geom_point(color = custom_palette["primary"], alpha = 0.7) +
+  geom_smooth(method = "lm", se = FALSE, color = custom_palette["secondary"]) +
+  labs(title = "Social Media and Sleep", x = "Social Media Hours", y = "Sleep Hours") +
+  theme_minimal()
+```
+
+```{r social-vs-study}
+ggplot(data, aes(x = social_media_hours, y = study_hours_per_day)) +
+  geom_point(color = custom_palette["primary"], alpha = 0.7) +
+  geom_smooth(method = "lm", se = FALSE, color = custom_palette["secondary"]) +
+  labs(title = "Social Media and Study Time", x = "Social Media Hours", y = "Study Hours") +
+  theme_minimal()
+```
+
+---
+
+## 🏃 Section 4: Exercise – A Positive Influence
+
+```{r exam-vs-exercise}
+ggplot(data, aes(x = exercise_frequency, y = exam_score)) +
+  geom_jitter(width = 0.3, color = custom_palette["primary"], alpha = 0.7, size = 2) +
+  geom_smooth(method = "lm", se = FALSE, color = custom_palette["secondary"]) +
+  labs(title = "Exam Scores by Exercise Frequency", x = "Exercise Days/Week", y = "Exam Score") +
+  theme_minimal()
+```
+
+```{r sleep-vs-exercise}
+ggplot(data, aes(x = exercise_frequency, y = sleep_hours)) +
+  geom_jitter(width = 0.3, color = custom_palette["tertiary"], alpha = 0.7, size = 2) +
+  geom_smooth(method = "lm", se = FALSE, color = custom_palette["secondary"]) +
+  labs(title = "Sleep Hours by Exercise Frequency", x = "Exercise Days/Week", y = "Sleep Hours") +
+  theme_minimal()
+```
+
+```{r study-vs-exercise}
+ggplot(data, aes(x = exercise_frequency, y = study_hours_per_day)) +
+  geom_jitter(width = 0.3, color = custom_palette["contrast"], alpha = 0.7, size = 2) +
+  geom_smooth(method = "lm", se = FALSE, color = custom_palette["secondary"]) +
+  labs(title = "Study Hours by Exercise Frequency", x = "Exercise Days/Week", y = "Study Hours") +
+  theme_minimal()
+```
+
+---
+
+## 🎭 Section 5: Extracurricular Participation – A Balancing Act
+
+```{r extracurricular-vs-score}
+ggplot(data, aes(x = extracurricular_participation, y = exam_score, fill = extracurricular_participation)) +
+  geom_boxplot(alpha = 0.7) +
+  scale_fill_manual(values = c("yes" = custom_palette["primary"], "no" = custom_palette["secondary"])) +
+  labs(
+    title = "Exam Scores by Extracurricular Participation",
+    x = "Participates in Extracurriculars",
+    y = "Exam Score",
+    fill = "Participation"
+  ) +
+  theme_minimal()
+```
+
+---
+
+## 🧠 Section 6: Putting It All Together
+
+```{r interactive-balance}
+p <- ggplot(data, aes(x = study_hours_per_day, y = sleep_hours, color = exam_score, text = paste("Score:", exam_score))) +
+  geom_point(size = 3) +
+  scale_color_gradient(low = custom_palette["tertiary"], high = custom_palette["accent"]) +
+  labs(title = "Interactive: Study & Sleep vs. Score", x = "Study Hours", y = "Sleep Hours") +
+  theme_minimal()
+
+ggplotly(p, tooltip = "text")
+```
+
+```{r correlation-matrix}
+ggcorr(data %>% select(study_hours_per_day, sleep_hours, social_media_hours, exercise_frequency, exam_score), label = TRUE) +
+  ggtitle("Correlation Between Variables")
+```
+
+## 🏁 Final Thoughts
+
+This data story reveals that **study hours** are the strongest predictor of success — but not the only one. Students who also sleep well, exercise regularly, participate in extracurriculars, and minimize social media distractions tend to do better. Academic performance is a **multi-dimensional** outcome, shaped by how students manage their time, habits, and well-being.

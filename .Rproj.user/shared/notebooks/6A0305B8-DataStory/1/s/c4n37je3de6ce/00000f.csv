@@ -1,0 +1,5 @@
+"0","ggplot(data, aes(x = study_hours_per_day, y = sleep_hours, color = exam_score)) +"
+"0","  geom_point(size = 3, alpha = 0.8, color = custom_palette[""contrast""]) +"
+"0","  scale_color_gradient(low = custom_palette[""tertiary""], high = custom_palette[""accent""]) +"
+"0","  labs(title = ""Balance of Study and Sleep by Exam Score"", x = ""Study Hours"", y = ""Sleep Hours"") +"
+"0","  theme_minimal()"

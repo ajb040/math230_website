@@ -1,0 +1,125 @@
+---
+title: "Welcome to My Data Exhibit"
+description: "Explore the habits that shape student success — through visual storytelling."
+output: 
+  html_document:
+    theme: sandstone  
+---
+
+## 👋 Welcome
+
+My name is Andrew Bond and welcome to my virtual data visualization exhibit for *MATH 230: Data Visualization & Computing*. This site showcases my work throughout the semester, culminating in a personal data story about how lifestyle habits influence student exam performance.
+
+---
+
+## 🖼️ What You'll Find Here
+
+### 🎓 **Data Story: More Than Just Studying**
+
+In this project, I explore the idea that **study hours are only part of the equation** when it comes to academic performance. Using data on sleep, social media, exercise, and extracurricular involvement, I dive into the *complex puzzle* of student success.
+
+[👉 View the full story](Test.html)
+
+---
+
+### 🎨 **Past Visual Work**
+
+Throughout the semester, I've created a variety of visualizations exploring different datasets, techniques, and design principles — from generative art to dashboards and statistical graphics.
+
+[🎥 Explore my gallery](Past_Works.html)
+
+---
+
+## 🎯 Purpose
+
+This site is both a **portfolio** and a **storytelling exhibit**. It reflects what I've learned about programming in R, visual design, and data interpretation. Whether you're here as a peer, professor, or curious reader, I hope you leave with a clearer picture of how **data shapes our understanding** of the world — and how design shapes our understanding of data.
+
+Thanks for stopping by!
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(patchwork)
+library(ggtext)
+library(showtext)
+library(scales)
+library(janitor)
+
+# Load dataset
+data <- read_csv("student_habits_performance.csv") %>% clean_names()
+
+# Add Google font
+font_add_google("Lato", "lato")
+showtext_auto()
+
+# Define a blue-orange theme
+blue <- "#1b9e77"
+orange <- "#ff7f00"
+
+theme_infographic <- theme_minimal(base_family = "lato") +
+  theme(
+    plot.title = element_text(size = 18, face = "bold", color = blue),
+    plot.subtitle = element_text(size = 12),
+    axis.title = element_blank(),
+    axis.text = element_text(size = 8),
+    plot.margin = margin(10, 10, 10, 10),
+    panel.grid.minor = element_blank()
+  )
+
+# Plot 1: Study Hours vs. Score
+p1 <- ggplot(data, aes(x = study_hours_per_day, y = exam_score)) +
+  geom_point(alpha = 0.6, color = blue) +
+  geom_smooth(method = "lm", se = FALSE, color = orange, size = 1.2) +
+  labs(title = "Study More, Score Higher") +
+  scale_y_continuous(limits = c(25, 100), breaks = seq(25, 100, by = 25)) +
+  theme_infographic
+
+# Plot 2: Sleep vs. Score
+p2 <- ggplot(data, aes(x = sleep_hours, y = exam_score)) +
+  geom_point(alpha = 0.6, color = orange) +
+  geom_smooth(method = "lm", se = FALSE, color = blue, size = 1.2) +
+  labs(title = "Sleep Supports Performance") +
+  theme_infographic
+
+# Plot 3: Social Media vs. Score
+p3 <- ggplot(data, aes(x = social_media_hours, y = exam_score)) +
+  geom_point(alpha = 0.6, color = orange) +
+  geom_smooth(method = "lm", se = FALSE, color = blue, size = 1.2) +
+  labs(title = "Too Much Scrolling Hurts Scores") +
+  theme_infographic
+
+# Plot 4: Exercise vs. Score
+p4 <- ggplot(data, aes(x = exercise_frequency, y = exam_score)) +
+  geom_jitter(width = 0.3, alpha = 0.6, color = blue) +
+  geom_smooth(method = "lm", se = FALSE, color = orange, size = 1.2) +
+  labs(title = "Active Students Perform Better") +
+  theme_infographic
+
+# Main Title Block
+title <- ggplot() +
+  annotate("text", x = 1, y = 2, label = "Student Success: Habits That Matter",
+           size = 8, hjust = 0.5, fontface = "bold", family = "lato", color = blue) +
+  annotate("text", x = 1, y = .5, label = "An exploration of how study time, sleep, social media, and exercise habits influence exam performance",
+           size = 4, hjust = 0.5, family = "lato", color = "gray20") +
+  xlim(0,2) + 
+  ylim(0,3) +
+  theme_void()
+
+footer <- ggplot() +
+  annotate("text", x = 1, y = 1, label = "Explore this and more in More Than Just Studying: The Complex Puzzle of Student Success", 
+           size = 4, hjust = 0.5, family = "lato", color = "gray20") +
+  theme_void()
+
+# Assemble the infographic
+infographic <- title / (p1 | p2) / (p3 | p4) / footer+
+  plot_layout(heights = c(.5, 1, 1, 0.1))
+
+# Display
+infographic
+
+```

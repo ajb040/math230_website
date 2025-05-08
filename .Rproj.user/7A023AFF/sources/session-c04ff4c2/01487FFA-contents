@@ -1,0 +1,179 @@
+---
+title: "🎓 More Than Just Studying: The Complex Puzzle of Student Success"
+description: "An exploration of how study time, sleep, social media, and exercise habits influence exam performance."
+output: 
+  html_document:
+    theme: sandstone  
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+library(ggplot2)
+library(plotly)
+library(viridis)
+library(janitor)
+library(GGally)
+```
+
+```{r load-data}
+data <- read_csv("student_habits_performance.csv") %>%
+  clean_names()
+```
+
+We often hear that students who study more get better grades — and that’s largely true. But performance isn’t only about study time. This data story explores how **other factors**, like **sleep habits**, **social media use**, and **physical exercise**, play subtle but meaningful roles in shaping student outcomes.
+
+---
+
+## 📍 Section 1: Study Hours – The Strongest Predictor
+
+```{r hist-exam-score}
+ggplot(data, aes(x = exam_score)) +
+  geom_histogram(fill = "#1b9e77", color = "white", bins = 20) +
+  labs(title = "Distribution of Exam Scores", x = "Exam Score", y = "Count") +
+  theme_minimal()
+```
+
+The distribution shows a typical bell shape, with most students scoring between 70 and 90. But what separates the top performers?
+
+---
+
+```{r study-vs-score}
+ggplot(data, aes(x = study_hours_per_day, y = exam_score)) +
+  geom_point(color = "#1b9e77", alpha = 0.7) +
+  geom_smooth(method = "lm", se = FALSE, color = "#ff7f00") +
+  scale_x_continuous(breaks = 0:8) +
+  scale_y_continuous(limits = c(25, 100), breaks = seq(25, 100, by = 25)) +
+  labs(title = "More Studying, Better Scores?", x = "Study Hours", y = "Exam Score") +
+  theme_minimal()
+```
+
+As expected, there’s a clear upward trend: students who spend more time studying tend to score higher. However, not all students who studied more performed best — suggesting other influences at play.
+
+---
+
+## 😴 Section 2: Sleep – A Support System
+
+```{r sleep-vs-score}
+ggplot(data, aes(x = sleep_hours, y = exam_score)) +
+  geom_point(color = "#1b9e77", alpha = 0.7) +
+  geom_smooth(method = "lm", se = FALSE, color = "#ff7f00") +
+  scale_x_continuous(breaks = 0:10) +
+  labs(title = "Sleep and Exam Performance", x = "Sleep Hours", y = "Exam Score") +
+  theme_minimal()
+```
+
+Sleep appears to have a positive but moderate effect on performance.
+
+```{r interactive-balance}
+p <- ggplot(data, aes(x = study_hours_per_day, y = sleep_hours, 
+                      color = exam_score, 
+                      text = paste("Score:", exam_score))) +
+  geom_point(size = 3) +
+  scale_color_gradientn(colors = c("#1b9e77", "#D5B60A", "#e66101")) +  # green → yellow → orange
+  labs(
+    title = "Interactive: Study & Sleep vs. Score",
+    x = "Study Hours",
+    y = "Sleep Hours"
+  ) +
+  scale_x_continuous(breaks = 0:8) +
+  theme_minimal()
+
+ggplotly(p, tooltip = "text")
+```
+
+This interactive chart shows the balance between sleep and study. High scores cluster in areas where both sleep and study hours are moderate to high, supporting the idea that sleep doesn’t detract from success — it supports it.
+
+---
+
+## 📱 Section 3: Social Media – A Subtle Distraction
+
+```{r social-vs-score}
+ggplot(data, aes(x = social_media_hours, y = exam_score)) +
+  geom_point(color = "#1b9e77", alpha = 0.7) +
+  geom_smooth(method = "lm", se = FALSE, color = "#ff7f00") +
+  labs(title = "Social Media Time vs. Exam Score", x = "Social Media Hours", y = "Exam Score") +
+  scale_x_continuous(breaks = 0:7) +
+  theme_minimal()
+```
+
+Time spent on social media shows a negative correlation with exam scores. The more time students spend scrolling, the lower their performance tends to be.
+
+```{r social-vs-study}
+ggplot(data, aes(x = social_media_hours, y = study_hours_per_day)) +
+  geom_point(color = "#1b9e77", alpha = 0.7) +
+  geom_smooth(method = "lm", se = FALSE, color = "#ff7f00") +
+  labs(title = "Social Media and Study Time", x = "Social Media Hours", y = "Study Hours") +
+  scale_x_continuous(breaks = 0:7) +
+  theme_minimal()
+```
+
+Based on the previous graph, I would naturally assume that Social Media Hours would be taking away valuable study hours from students, but according to this graph it has little to no change. This might show that Social Media causes the study hours to be less effective by serving as a distraction for students.
+
+---
+
+## 🏃 Section 4: Exercise – A Positive Influence
+
+```{r exam-vs-exercise}
+ggplot(data, aes(x = exercise_frequency, y = exam_score)) +
+  geom_jitter(width = 0.3, color = "#1b9e77", alpha = 0.7, size = 2) +
+  geom_smooth(method = "lm", se = FALSE, color = "#ff7f00") +
+  scale_x_continuous(breaks = 0:6) +
+  labs(title = "Exam Scores by Exercise Frequency",
+       x = "Exercise Days per Week",
+       y = "Exam Score") +
+  theme_minimal()
+```
+
+Regular exercise shows a small but encouraging positive trend in exam scores. Students who exercised 3–5 times per week tended to outperform peers who exercised less.
+
+---
+
+## 🎭 Section 5: Extracurricular Participation – A Balancing Act
+
+```{r extracurricular-vs-score}
+ggplot(data, aes(x = extracurricular_participation, y = exam_score, fill = extracurricular_participation)) +
+  geom_boxplot(alpha = 0.7) +
+  scale_fill_manual(values = c("Yes" = "#ff7f00", "No" = "#1b9e77")) +
+  labs(
+    title = "Exam Scores by Extracurricular Participation",
+    x = "Participates in Extracurriculars",
+    y = "Exam Score",
+    fill = "Participation"
+  ) +
+  theme_minimal()
+```
+
+Interestingly, students who participate in extracurriculars have slightly higher median scores. This suggests that involvement outside of academics doesn’t hurt — and may even help by promoting time management or relieving stress. 
+
+---
+
+## 🧠 Section 6: Putting It All Together
+```{r}
+ggcorr(
+  data %>% 
+    select(
+      Study = study_hours_per_day, 
+      Sleep = sleep_hours, 
+      "Social Media" = social_media_hours, 
+      Exercise = exercise_frequency, 
+      Score = exam_score
+    ),
+  label = TRUE,
+  label_size = 4,
+  low = "#e66101",     # orange for negative
+  mid = "#f7f7f7",     # neutral
+  high = "#1b9e77",    # green for positive
+  midpoint = 0,
+  layout.exp = 2        # increases spacing between axis labels
+) +
+  ggtitle("Correlation Between Habits and Exam Scores") +
+  theme_minimal(base_size = 12)
+```
+
+The correlation matrix ties everything together. Study time shows the strongest positive correlation with exam scores, followed by sleep and exercise. Social media has a negative relationship — reinforcing the patterns we saw in the individual graphs.
+
+---
+
+## 🏁 Final Thoughts
+
+This data story reveals that **study hours** are the strongest predictor of success — but not the only one. Students who also sleep well, exercise regularly, and minimize social media distractions tend to do better. Academic performance is a **multi-dimensional** outcome, shaped by how students manage their time, habits, and well-being.

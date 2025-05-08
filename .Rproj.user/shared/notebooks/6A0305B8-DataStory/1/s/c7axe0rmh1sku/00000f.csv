@@ -1,0 +1,4 @@
+"0","ggplot(data, aes(x = score_tier, y = sleep_hours, fill = score_tier)) +"
+"0","  geom_col(stat = ""summary"", fun = mean, position = position_dodge()) +"
+"0","  labs(title = ""Average Sleep Hours by Score Tier"", x = ""Score Tier"", y = ""Average Sleep Hours"") +"
+"0","  theme_minimal()"

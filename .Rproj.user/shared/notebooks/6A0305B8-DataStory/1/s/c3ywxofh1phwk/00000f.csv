@@ -1,0 +1,7 @@
+"0","p <- ggplot(data, aes(x = study_hours_per_day, y = sleep_hours, color = exam_score, text = paste(""Score:"", exam_score))) +"
+"0","  geom_point(size = 3) +"
+"0","  scale_color_gradient(low = custom_palette[""tertiary""], high = custom_palette[""accent""]) +"
+"0","  labs(title = ""Interactive: Study & Sleep vs. Score"", x = ""Study Hours"", y = ""Sleep Hours"") +"
+"0","  theme_minimal()"
+"0",""
+"0","ggplotly(p, tooltip = ""text"")"

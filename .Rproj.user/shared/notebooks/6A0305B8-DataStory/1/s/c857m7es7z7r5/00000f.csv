@@ -1,0 +1,5 @@
+"0","ggplot(data, aes(x = exercise_frequency, y = sleep_hours)) +"
+"0","  geom_jitter(width = 0.3, color = custom_palette[""tertiary""], alpha = 0.7, size = 2) +"
+"0","  geom_smooth(method = ""lm"", se = FALSE, color = custom_palette[""secondary""]) +"
+"0","  labs(title = ""Sleep Hours by Exercise Frequency"", x = ""Exercise Days/Week"", y = ""Sleep Hours"") +"
+"0","  theme_minimal()"

@@ -1,0 +1,28 @@
+"0","library(ggplot2)"
+"0","library(dplyr)"
+"2","
+Attaching package: ‘dplyr’
+
+"
+"2","The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+"
+"2","The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+"
+"0","# Calculate slopes for each sleep group"
+"0","slopes <- student_data %>%"
+"0","  group_by(sleep_quality) %>%"
+"0","  summarise("
+"0","    slope = round(coef(lm(exam_score ~ study_hours_per_day))[2], 2),"
+"0","    label = paste(""Slope ="", slope)"
+"0","  )"
+"1","[1m[33mError[39m in `group_by()`:[22m
+[38;5;232m[33m![38;5;232m Must group by variables found in `.data`.
+[31m✖[38;5;232m Column `sleep_quality` is not found.[39m
+[90mRun `]8;;x-r-run:rlang::last_trace()rlang::last_trace()]8;;` to see where the error occurred.[39m
+"

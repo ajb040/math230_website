@@ -1,0 +1,5 @@
+"0","ggplot(mtcars, aes(area = hp, fill = mpg, label = rownames(mtcars))) +"
+"0","  geom_treemap() +"
+"0","  geom_treemap_text(color = ""white"", place = ""center"") +"
+"0","  scale_fill_gradient(low = ""lightblue"", high = ""darkblue"") +"
+"0","  labs(title = ""Treemap of Cars by Horsepower and MPG"", fill = ""Miles per Gallon (mpg)"")"
